@@ -51,6 +51,7 @@ public class DrawnFace extends PaintableBase {
     // Sonrisa
     // ----------------------------------------
 
+    
     x = (int) (x1 + (x2 - x1) * 0.25);
     y = (int) (y1 + (y2 - y1) * 0.625);
     w = (int) ((x2 - x1) * 0.5);
