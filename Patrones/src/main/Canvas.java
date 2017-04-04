@@ -26,7 +26,7 @@ public class Canvas extends JPanel {
   private List<Command> redoList = new ArrayList<Command>();
 
   private Paintable draggedPaintable;
-  private Point/* */draggedBasePoint;
+  private Point/* ***/draggedBasePoint;
 
   private int dx;
   private int dy;
