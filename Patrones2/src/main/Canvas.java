@@ -45,7 +45,7 @@ public class Canvas extends JPanel {
     //    x = 100;
     //    y = 100;
     //    paintableList.add(paintableFactory.create(x, y, x + 100, y + 100, SmileConstants.SMILE_DW));
-    //Array
+        //Array
     //    // Face 2
     //    x = 200;
     //    y = 200;
@@ -55,7 +55,7 @@ public class Canvas extends JPanel {
     //    x = 300;
     //    y = 300;
     //    paintableList.add(paintableFactory.create(x, y, x + 100, y + 100, SmileConstants.SMILE_UP));
-
+        
     // --------------------------------------------------------------------------------
     // Mouse Handling
     // --------------------------------------------------------------------------------
