@@ -1,29 +1,25 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JPanel;
-
+import commands.Invoker;
 import commands.MoveCommand;
 import common.Command;
 import common.Paintable;
 import common.PaintableFactory;
 import common.SmileConstants;
 
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
+import java.util.List;
+
 public class Canvas extends JPanel {
 
-  private List<Paintable> paintableList = new ArrayList<Paintable>();
+  private List<Paintable> paintableList = new ArrayList<>();
 
-  private List<Command> undoList = new ArrayList<Command>();
-  private List<Command> redoList = new ArrayList<Command>();
+  private Invoker invoker;
 
   private Paintable draggedPaintable;
   private Point/* */draggedBasePoint;
@@ -33,7 +29,7 @@ public class Canvas extends JPanel {
 
   // --------------------------------------------------------------------------------
 
-  public Canvas() {
+  Canvas() {
     int x;
     int y;
 
@@ -73,11 +69,13 @@ public class Canvas extends JPanel {
         clientMouseReleased(evt);
       }
     });
+
+    this.invoker = new Invoker();
   }
 
   // --------------------------------------------------------------------------------
 
-  protected void clientMouseDragged(MouseEvent evt) {
+  private void clientMouseDragged(MouseEvent evt) {
     if (draggedPaintable == null) { // GTFO
       return;
     }
@@ -90,7 +88,7 @@ public class Canvas extends JPanel {
 
   // --------------------------------------------------------------------------------
 
-  protected void clientMousePressed(MouseEvent evt) {
+  private void clientMousePressed(MouseEvent evt) {
     draggedBasePoint = evt.getPoint();
 
     for (Paintable paintable : paintableList) {
@@ -105,7 +103,7 @@ public class Canvas extends JPanel {
 
   // --------------------------------------------------------------------------------
 
-  protected void clientMouseReleased(MouseEvent evt) {
+  private void clientMouseReleased(MouseEvent evt) {
     if (draggedPaintable == null) { // GTFO
       return;
     }
@@ -114,11 +112,9 @@ public class Canvas extends JPanel {
       return;
     }
 
-    MoveCommand moveCommand = new MoveCommand(draggedPaintable, dx, dy);
-    moveCommand.redoCommand();
-
-    undoList.add(moveCommand);
-    redoList.clear();
+    Command moveCommand = new MoveCommand(draggedPaintable, dx, dy);
+    invoker.setCommand(moveCommand);
+    invoker.executeCommand();
 
     draggedBasePoint = null;
     draggedPaintable = null;
@@ -165,27 +161,15 @@ public class Canvas extends JPanel {
 
   // --------------------------------------------------------------------------------
 
-  public void undo() {
-    if (undoList.isEmpty()) {
-      return;
-    }
-
-    Command command = undoList.remove(undoList.size() - 1);
-    command.undoCommand();
-    redoList.add(command);
+  void undo() {
+    invoker.undo();
     repaint();
   }
 
   // --------------------------------------------------------------------------------
 
-  public void redo() {
-    if (redoList.isEmpty()) {
-      return;
-    }
-
-    Command command = redoList.remove(redoList.size() - 1);
-    command.redoCommand();
-    undoList.add(command);
+  void redo() {
+    invoker.redo();
     repaint();
   }
 }

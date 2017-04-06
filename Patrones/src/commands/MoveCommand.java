@@ -23,7 +23,7 @@ public class MoveCommand implements Command {
   // --------------------------------------------------------------------------------
 
   @Override
-  public void redoCommand() {
+  public void executeCommand() {
     paintable.move(+dx, +dy);
   }
 
