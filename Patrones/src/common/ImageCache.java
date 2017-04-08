@@ -1,12 +1,11 @@
 package common;
 
+import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.imageio.ImageIO;
 
 // Singleton
 public class ImageCache {
@@ -15,13 +14,13 @@ public class ImageCache {
   // Variable de clase (la única instancia de la clase que va a existir)
   // --------------------------------------------------------------------------------
 
-  private static ImageCache instance;
+  private volatile static ImageCache instance;
 
   // --------------------------------------------------------------------------------
   // Variable de instancia (el cache en este caso particular)
   // --------------------------------------------------------------------------------
 
-  private Map<String, BufferedImage> imageMap = new HashMap<String, BufferedImage>();
+  private Map<String, BufferedImage> imageMap = new HashMap<>();
 
   // --------------------------------------------------------------------------------
 
@@ -31,9 +30,13 @@ public class ImageCache {
 
   // --------------------------------------------------------------------------------
 
-  public static synchronized ImageCache getInstance() {
+  public static ImageCache getInstance() {
     if (instance == null) {
-      instance = new ImageCache();
+      synchronized (ImageCache.class) {
+        if (instance == null) {
+          instance = new ImageCache();
+        }
+      }
     }
 
     return instance;
