@@ -2,8 +2,8 @@ package main;
 
 import commands.CreateCommand;
 import commands.DeleteCommand;
+import commands.Invoker;
 import commands.MoveCommand;
-import common.Command;
 import plugins.Paintable;
 import plugins.PaintableFactory;
 import plugins.PaintableType;
@@ -21,8 +21,6 @@ public class Canvas extends JPanel {
   private List<Paintable> paintableList = new ArrayList<>();
 
   // --------------------------------------------------------------------------------
-  private List<Command> undoList = new ArrayList<>();
-  private List<Command> redoList = new ArrayList<>();
   private PaintableFactory paintableFactory = null;
   private Paintable draggedPaintable;
   private Point/* */draggedBasePoint;
@@ -30,6 +28,7 @@ public class Canvas extends JPanel {
   private int dx;
   private int dy;
   private PaintableType paintableType;
+    private Invoker invoker;
 
   Canvas() {
     // --------------------------------------------------------------------------------
@@ -51,6 +50,7 @@ public class Canvas extends JPanel {
         clientMouseReleased(evt);
       }
     });
+      this.invoker = new Invoker();
   }
 
   // --------------------------------------------------------------------------------
@@ -104,10 +104,8 @@ public class Canvas extends JPanel {
               paintable, //
               paintableList);
 
-          deleteCommand.redoCommand();
-
-          undoList.add(deleteCommand);
-          redoList.clear();
+            invoker.setCommand(deleteCommand);
+            invoker.executeCommand();
         }
 
         break;
@@ -117,10 +115,9 @@ public class Canvas extends JPanel {
             evt.getPoint().x, evt.getPoint().y, //
                 paintableList, this.paintableType);
 
-        createCommand.redoCommand();
-
-        undoList.add(createCommand);
-        redoList.clear();
+          createCommand.executeCommand();
+          invoker.setCommand(createCommand);
+          invoker.executeCommand();
         break;
     }
 
@@ -137,10 +134,8 @@ public class Canvas extends JPanel {
     }
 
     MoveCommand moveCommand = new MoveCommand(draggedPaintable, dx, dy);
-    moveCommand.redoCommand();
-
-    undoList.add(moveCommand);
-    redoList.clear();
+      invoker.setCommand(moveCommand);
+      invoker.executeCommand();
 
     draggedBasePoint = null;
     draggedPaintable = null;
@@ -190,26 +185,14 @@ public class Canvas extends JPanel {
   // --------------------------------------------------------------------------------
 
   void undo() {
-    if (undoList.isEmpty()) {
-      return;
-    }
-
-    Command command = undoList.remove(undoList.size() - 1);
-    command.undoCommand();
-    redoList.add(command);
+      invoker.undo();
     repaint();
   }
 
   // --------------------------------------------------------------------------------
 
   void redo() {
-    if (redoList.isEmpty()) {
-      return;
-    }
-
-    Command command = redoList.remove(redoList.size() - 1);
-    command.redoCommand();
-    undoList.add(command);
+      invoker.redo();
     repaint();
   }
 

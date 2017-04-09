@@ -35,7 +35,7 @@ public class CreateCommand implements Command {
   // --------------------------------------------------------------------------------
 
   @Override
-  public void redoCommand() {
+  public void executeCommand() {
     if (paintable == null) {
         switch (this.paintableType) {
             case DRAWN:

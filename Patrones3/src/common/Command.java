@@ -2,8 +2,7 @@ package common;
 
 // Command
 public interface Command {
+    void executeCommand();
 
-  public void redoCommand();
-
-  public void undoCommand();
+    void undoCommand();
 }

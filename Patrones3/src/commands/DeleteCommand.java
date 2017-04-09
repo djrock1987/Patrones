@@ -1,9 +1,9 @@
 package commands;
 
-import java.util.List;
-
 import common.Command;
 import plugins.Paintable;
+
+import java.util.List;
 
 // Command
 public class DeleteCommand implements Command {
@@ -26,7 +26,7 @@ public class DeleteCommand implements Command {
   // --------------------------------------------------------------------------------
 
   @Override
-  public void redoCommand() {
+  public void executeCommand() {
     paintableList.remove(paintable);
   }
 
