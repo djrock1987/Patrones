@@ -44,7 +44,7 @@ public class ImageCache {
 
   // --------------------------------------------------------------------------------
 
-  public BufferedImage getImage(String filename) {
+  public  BufferedImage getImage(String filename) {
     BufferedImage ret = imageMap.get(filename);
 
     if (ret == null) {

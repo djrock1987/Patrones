@@ -20,11 +20,11 @@ public class ImageFace extends PaintableBase {
 		super(x1, y1, x2, y2);
 
 		// Opcion A
-//		try {
-//			bufferedImage = ImageIO.read(new File("smile0.png"));
-//		} catch (IOException e) {
-//			throw new RuntimeException(e);
-//		}
+		try {
+			bufferedImage = ImageIO.read(new File("smile0.png"));
+		} catch (IOException e) {
+			throw new RuntimeException(e);
+		}
 
 		 //Opcion B
 		 switch (state) {
