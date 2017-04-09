@@ -81,7 +81,7 @@ public class FrmMain extends JFrame {
         public void actionPerformed(ActionEvent e) {
           client.setPaintableFactory(paintableFactory);
           client.setTool(Tool.PLUGIN);
-            client.setPaintableType(getCurrentPaintableType());
+          client.setPaintableType(getCurrentPaintableType());
         }
       });
       toolBar.add(btnTool);
@@ -172,6 +172,10 @@ public class FrmMain extends JFrame {
 
         this.paintableTypeCheckBox = new JCheckBox();
         toolBar.add(this.paintableTypeCheckBox);
+        
+        this.paintableTypeCheckBox.addActionListener((ActionEvent e) -> {
+            client.setPaintableType(getCurrentPaintableType());
+        });
 
         return toolBar;
     }
