@@ -1,14 +1,11 @@
 package paintables;
 
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-
 import common.ImageCache;
 import common.PaintableBase;
 import common.SmileConstants;
-import java.io.File;
-import java.io.IOException;
-import javax.imageio.ImageIO;
+
+import java.awt.*;
+import java.awt.image.BufferedImage;
 
 public class ImageFace extends PaintableBase {
 
@@ -19,14 +16,6 @@ public class ImageFace extends PaintableBase {
   public ImageFace(int x1, int y1, int x2, int y2, int state) {
     super(x1, y1, x2, y2);
 
-   //  Opcion A
-//        try {
-//          bufferedImage = ImageIO.read(new File("smile0.png"));
-//        } catch (IOException e) {
-//          throw new RuntimeException(e);
-//        }
-
-    // Opcion B
     switch (state) {
       case SmileConstants.SMILE_DW :
         bufferedImage = ImageCache.getInstance().getImage("smile0.png");
