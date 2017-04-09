@@ -1,13 +1,15 @@
 package plugins;
 
-import javax.swing.ImageIcon;
+import javax.swing.*;
 
 // Factory
 public interface PaintableFactory {
 
-  public Paintable create(int x1, int y1, int x2, int y2);
+    Paintable createImagePaintable(int x1, int y1, int x2, int y2);
 
-  public ImageIcon getToolIcon();
+    Paintable createDrawnPaintable(int x1, int y1, int x2, int y2);
 
-  public String/**/getToolName();
+    ImageIcon getToolIcon();
+
+    String/**/getToolName();
 }

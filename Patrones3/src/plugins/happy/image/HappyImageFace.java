@@ -1,19 +1,20 @@
-package plugins.happy;
-
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+package plugins.happy.image;
 
 import common.ImageCache;
-import plugins.PaintableBase;
+import paintables.ImageFace;
 import plugins.PaintableFactory;
+import plugins.happy.HappyPaintableFactory;
 
-public class HappyPaintable extends PaintableBase {
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+public class HappyImageFace extends ImageFace {
 
   private BufferedImage bufferedImage;
 
   // --------------------------------------------------------------------------------
 
-  public HappyPaintable(int x1, int y1, int x2, int y2) {
+    public HappyImageFace(int x1, int y1, int x2, int y2) {
     super(x1, y1, x2, y2);
 
     bufferedImage = ImageCache.getInstance().getImage("smile2.png", getClass());
@@ -30,6 +31,6 @@ public class HappyPaintable extends PaintableBase {
 
   @Override
   public PaintableFactory getPaintableFactory() {
-    return new HappyPaintableFactory();
+      return HappyPaintableFactory.getInstance();
   }
 }

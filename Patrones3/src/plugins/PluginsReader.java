@@ -3,6 +3,7 @@ package plugins;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,8 +25,8 @@ public class PluginsReader {
 
   // --------------------------------------------------------------------------------
 
-  public static List<PaintableFactory> exRead(InputStream is) throws Exception {
-    List<PaintableFactory> ret = new ArrayList<PaintableFactory>();
+    private static List<PaintableFactory> exRead(InputStream is) throws Exception {
+        List<PaintableFactory> ret = new ArrayList<>();
 
     BufferedReader rd = new BufferedReader(new InputStreamReader(is));
 
@@ -38,8 +39,9 @@ public class PluginsReader {
         continue;
       }
 
-      PaintableFactory paintableFactory = //
-      (PaintableFactory) Class.forName(line).newInstance();
+        Class<?> clasz = Class.forName(line);
+        Method method = clasz.getMethod("getInstance");
+        PaintableFactory paintableFactory = (PaintableFactory) method.invoke(null);
 
       ret.add(paintableFactory);
     }

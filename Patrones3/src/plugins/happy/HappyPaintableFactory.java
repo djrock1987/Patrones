@@ -1,24 +1,45 @@
 package plugins.happy;
 
-import javax.swing.ImageIcon;
-
 import common.ImageCache;
 import plugins.Paintable;
 import plugins.PaintableFactory;
+import plugins.happy.drawn.HappyDrawnFace;
+import plugins.happy.image.HappyImageFace;
 
+import javax.swing.*;
 
 
 // Factory
 public class HappyPaintableFactory implements PaintableFactory {
 
-    private boolean useImage = true;
+    // singleton
+    private static HappyPaintableFactory instance;
 
-  public Paintable create(int x1, int y1, int x2, int y2) {
-        //if (useImage) {
-    return new HappyPaintable(x1, y1, x2, y2);
-     //   } else {
-      //   return new DrawnFace(x1, y1, x2, y2);
-     //  }
+    private HappyPaintableFactory() {
+        // private constructor
+    }
+
+    // singleton
+    public static HappyPaintableFactory getInstance() {
+        if (HappyPaintableFactory.instance == null) {
+            synchronized (HappyPaintableFactory.class) {
+                if (HappyPaintableFactory.instance == null) {
+                    HappyPaintableFactory.instance = new HappyPaintableFactory();
+                }
+            }
+        }
+
+        return HappyPaintableFactory.instance;
+    }
+
+    @Override
+    public Paintable createImagePaintable(int x1, int y1, int x2, int y2) {
+        return new HappyImageFace(x1, y1, x2, y2);
+    }
+
+    @Override
+    public Paintable createDrawnPaintable(int x1, int y1, int x2, int y2) {
+        return new HappyDrawnFace(x1, y1, x2, y2);
   }
 
   @Override

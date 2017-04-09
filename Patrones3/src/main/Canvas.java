@@ -1,70 +1,37 @@
 package main;
 
-import java.awt.Color;
-import java.awt.Graphics;
-import java.awt.Graphics2D;
-import java.awt.Point;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionAdapter;
-import java.util.ArrayList;
-import java.util.List;
-
-import javax.swing.JPanel;
-
 import commands.CreateCommand;
 import commands.DeleteCommand;
 import commands.MoveCommand;
 import common.Command;
 import plugins.Paintable;
 import plugins.PaintableFactory;
+import plugins.PaintableType;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Canvas extends JPanel {
 
-  public enum Tool {
-    SELECT, DELETE, PLUGIN
-  }
+  private List<Paintable> paintableList = new ArrayList<>();
 
   // --------------------------------------------------------------------------------
-
-  private List<Paintable> paintableList = new ArrayList<Paintable>();
-
-  private List<Command> undoList = new ArrayList<Command>();
-  private List<Command> redoList = new ArrayList<Command>();
-
+  private List<Command> undoList = new ArrayList<>();
+  private List<Command> redoList = new ArrayList<>();
   private PaintableFactory paintableFactory = null;
-
   private Paintable draggedPaintable;
   private Point/* */draggedBasePoint;
-
   private Tool tool = Tool.SELECT;
-
   private int dx;
   private int dy;
+  private PaintableType paintableType;
 
-  // --------------------------------------------------------------------------------
-
-  public Canvas() {
-    //    int x;
-    //    int y;
-    //
-    //    PaintableFactory paintableFactory = new PaintableFactory();
-    //
-    //    // Face 1
-    //    x = 100;
-    //    y = 100;
-    //    paintableList.add(paintableFactory.create(x, y, x + 100, y + 100, SmileConstants.SMILE_DW));
-    //
-    //    // Face 2
-    //    x = 200;
-    //    y = 200;
-    //    paintableList.add(paintableFactory.create(x, y, x + 100, y + 100, SmileConstants.SMILE_OK));
-    //
-    //    // Face 3
-    //    x = 300;
-    //    y = 300;
-    //    paintableList.add(paintableFactory.create(x, y, x + 100, y + 100, SmileConstants.SMILE_UP));
-
+  Canvas() {
     // --------------------------------------------------------------------------------
     // Mouse Handling
     // --------------------------------------------------------------------------------
@@ -88,7 +55,7 @@ public class Canvas extends JPanel {
 
   // --------------------------------------------------------------------------------
 
-  protected void clientMouseDragged(MouseEvent evt) {
+  private void clientMouseDragged(MouseEvent evt) {
     if (draggedPaintable == null) { // GTFO
       return;
     }
@@ -101,7 +68,7 @@ public class Canvas extends JPanel {
 
   // --------------------------------------------------------------------------------
 
-  protected Paintable getPaintableAt(Point point) {
+  private Paintable getPaintableAt(Point point) {
     synchronized (paintableList) {
       for (Paintable paintable : paintableList) {
         if (paintable.inside(point)) {
@@ -113,7 +80,9 @@ public class Canvas extends JPanel {
     return null;
   }
 
-  protected void clientMousePressed(MouseEvent evt) {
+  // --------------------------------------------------------------------------------
+
+  private void clientMousePressed(MouseEvent evt) {
 
     Paintable paintable;
 
@@ -146,7 +115,7 @@ public class Canvas extends JPanel {
         CreateCommand createCommand = new CreateCommand( //
             paintableFactory, //
             evt.getPoint().x, evt.getPoint().y, //
-            paintableList);
+                paintableList, this.paintableType);
 
         createCommand.redoCommand();
 
@@ -158,9 +127,7 @@ public class Canvas extends JPanel {
     repaint();
   }
 
-  // --------------------------------------------------------------------------------
-
-  protected void clientMouseReleased(MouseEvent evt) {
+  private void clientMouseReleased(MouseEvent evt) {
     if (draggedPaintable == null) { // GTFO
       return;
     }
@@ -222,7 +189,7 @@ public class Canvas extends JPanel {
 
   // --------------------------------------------------------------------------------
 
-  public void undo() {
+  void undo() {
     if (undoList.isEmpty()) {
       return;
     }
@@ -235,7 +202,7 @@ public class Canvas extends JPanel {
 
   // --------------------------------------------------------------------------------
 
-  public void redo() {
+  void redo() {
     if (redoList.isEmpty()) {
       return;
     }
@@ -247,12 +214,14 @@ public class Canvas extends JPanel {
   }
 
   // --------------------------------------------------------------------------------
-  // Misc
-  // --------------------------------------------------------------------------------
 
-  public void setPaintableFactory(PaintableFactory paintableFactory) {
+  void setPaintableFactory(PaintableFactory paintableFactory) {
     this.paintableFactory = paintableFactory;
   }
+
+  // --------------------------------------------------------------------------------
+  // Misc
+  // --------------------------------------------------------------------------------
 
   public List<Paintable> getPaintableList() {
     return paintableList;
@@ -266,7 +235,19 @@ public class Canvas extends JPanel {
     return tool;
   }
 
-  public void setTool(Tool tool) {
+  void setTool(Tool tool) {
     this.tool = tool;
+  }
+
+  public PaintableType getPaintableType() {
+    return paintableType;
+  }
+
+  void setPaintableType(PaintableType paintableType) {
+    this.paintableType = paintableType;
+  }
+
+  public enum Tool {
+    SELECT, DELETE, PLUGIN
   }
 }

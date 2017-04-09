@@ -1,22 +1,23 @@
-package plugins.normal;
-
-import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
+package plugins.sad.image;
 
 import common.ImageCache;
-import plugins.PaintableBase;
+import paintables.ImageFace;
 import plugins.PaintableFactory;
+import plugins.sad.SadPaintableFactory;
 
-public class NormalPaintable extends PaintableBase {
+import java.awt.*;
+import java.awt.image.BufferedImage;
+
+public class SadImageFace extends ImageFace {
 
   private BufferedImage bufferedImage;
 
   // --------------------------------------------------------------------------------
 
-  public NormalPaintable(int x1, int y1, int x2, int y2) {
+  public SadImageFace(int x1, int y1, int x2, int y2) {
     super(x1, y1, x2, y2);
 
-    bufferedImage = ImageCache.getInstance().getImage("smile1.png", getClass());
+    bufferedImage = ImageCache.getInstance().getImage("smile0.png", getClass());
   }
 
   // --------------------------------------------------------------------------------
@@ -30,6 +31,6 @@ public class NormalPaintable extends PaintableBase {
 
   @Override
   public PaintableFactory getPaintableFactory() {
-    return new NormalPaintableFactory();
+    return SadPaintableFactory.getInstance();
   }
 }

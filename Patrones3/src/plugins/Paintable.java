@@ -1,29 +1,30 @@
 package plugins;
 
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 
 public interface Paintable {
 
-  public boolean inside(Point point);
+    boolean inside(Point point);
 
   // --------------------------------------------------------------------------------
 
-  public void draw(Graphics2D g2d);
+    void draw(Graphics2D g2d);
 
-  public void move(int dx, int dy);
-
-  // --------------------------------------------------------------------------------
-
-  public int getX1();
-
-  public int getY1();
-
-  public int getX2();
-
-  public int getY2();
+    void move(int dx, int dy);
 
   // --------------------------------------------------------------------------------
 
-  public PaintableFactory getPaintableFactory();
+    int getX1();
+
+    int getY1();
+
+    int getX2();
+
+    int getY2();
+
+  // --------------------------------------------------------------------------------
+
+    PaintableFactory getPaintableFactory();
+
+    PaintableType getPaintableType();
 }

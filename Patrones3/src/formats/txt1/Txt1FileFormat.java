@@ -1,16 +1,14 @@
 package formats.txt1;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.PrintWriter;
-import java.util.List;
-import java.util.regex.Pattern;
-
 import formats.FileFormat;
 import plugins.Paintable;
 import plugins.PaintableFactory;
+import plugins.PaintableType;
+
+import java.io.*;
+import java.lang.reflect.Method;
+import java.util.List;
+import java.util.regex.Pattern;
 
 public class Txt1FileFormat implements FileFormat {
 
@@ -31,14 +29,28 @@ public class Txt1FileFormat implements FileFormat {
 
       String[] data = p.split(line);
 
-      PaintableFactory pf = (PaintableFactory) Class.forName(data[0]).newInstance();
+        Class<?> clasz = Class.forName(data[0]);
+        Method method = clasz.getMethod("getInstance");
+        PaintableFactory pf = (PaintableFactory) method.invoke(null);
 
-      Paintable paintable = pf.create( //
-          Integer.parseInt(data[1]), //
-          Integer.parseInt(data[2]), //
-          Integer.parseInt(data[3]), //
-          Integer.parseInt(data[4]));
-
+        PaintableType paintableType = PaintableType.valueOf(data[5]);
+        Paintable paintable = null;
+        switch (paintableType) {
+            case DRAWN:
+                paintable = pf.createDrawnPaintable( //
+                        Integer.parseInt(data[1]), //
+                        Integer.parseInt(data[2]), //
+                        Integer.parseInt(data[3]), //
+                        Integer.parseInt(data[4]));
+                break;
+            case IMAGE:
+                paintable = pf.createImagePaintable( //
+                        Integer.parseInt(data[1]), //
+                        Integer.parseInt(data[2]), //
+                        Integer.parseInt(data[3]), //
+                        Integer.parseInt(data[4]));
+                break;
+        }
       paintableList.add(paintable);
     }
 
@@ -49,16 +61,20 @@ public class Txt1FileFormat implements FileFormat {
     PrintWriter pw = new PrintWriter(new FileWriter(file));
 
     for (Paintable paintable : paintableList) {
-      pw.print(paintable.getPaintableFactory().getClass().getName());
-      pw.print(" ");
-      pw.print(paintable.getX1());
-      pw.print(" ");
-      pw.print(paintable.getY1());
-      pw.print(" ");
-      pw.print(paintable.getX2());
-      pw.print(" ");
-      pw.print(paintable.getY2());
-      pw.println();
+        if (paintable.getPaintableFactory() != null) {
+            pw.print(paintable.getPaintableFactory().getClass().getName());
+            pw.print(" ");
+            pw.print(paintable.getX1());
+            pw.print(" ");
+            pw.print(paintable.getY1());
+            pw.print(" ");
+            pw.print(paintable.getX2());
+            pw.print(" ");
+            pw.print(paintable.getY2());
+            pw.print(" ");
+            pw.print(paintable.getPaintableType());
+            pw.println();
+        }
     }
 
     pw.close();

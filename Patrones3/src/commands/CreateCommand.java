@@ -1,10 +1,11 @@
 package commands;
 
-import java.util.List;
-
 import common.Command;
 import plugins.Paintable;
 import plugins.PaintableFactory;
+import plugins.PaintableType;
+
+import java.util.List;
 
 // Command
 public class CreateCommand implements Command {
@@ -15,16 +16,20 @@ public class CreateCommand implements Command {
 
   private List<Paintable> paintableList;
 
+    private PaintableType paintableType;
+
   private int x;
   private int y;
 
   // --------------------------------------------------------------------------------
 
-  public CreateCommand(PaintableFactory paintableFactory, int x, int y, List<Paintable> paintableList) {
+    public CreateCommand(PaintableFactory paintableFactory, int x, int y, List<Paintable> paintableList, PaintableType
+            paintableType) {
     this.paintableFactory = paintableFactory;
     this.x = x;
     this.y = y;
     this.paintableList = paintableList;
+        this.paintableType = paintableType;
   }
 
   // --------------------------------------------------------------------------------
@@ -32,10 +37,18 @@ public class CreateCommand implements Command {
   @Override
   public void redoCommand() {
     if (paintable == null) {
-      paintable = paintableFactory.create(x - 50, y - 50, x + 50, y + 50);
+        switch (this.paintableType) {
+            case DRAWN:
+                paintable = paintableFactory.createDrawnPaintable(x - 50, y - 50, x + 50, y + 50);
+                break;
+            case IMAGE:
+                paintable = paintableFactory.createImagePaintable(x - 50, y - 50, x + 50, y + 50);
+                break;
+        }
     }
-
-    paintableList.add(paintable);
+      if (!paintableList.contains(paintable)) {
+          paintableList.add(paintable);
+      }
   }
 
   // --------------------------------------------------------------------------------

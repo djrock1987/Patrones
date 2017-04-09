@@ -1,20 +1,5 @@
 package main;
 
-import java.awt.BorderLayout;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.File;
-import java.util.List;
-
-import javax.swing.ButtonGroup;
-import javax.swing.ImageIcon;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JFileChooser;
-import javax.swing.JFrame;
-import javax.swing.JToggleButton;
-import javax.swing.JToolBar;
-
 import common.ImageCache;
 import formats.ExtFileFilter;
 import formats.FileFormat;
@@ -22,7 +7,15 @@ import formats.FileFormatFactory;
 import formats.FileFormatReader;
 import main.Canvas.Tool;
 import plugins.PaintableFactory;
+import plugins.PaintableType;
 import plugins.PluginsReader;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.File;
+import java.util.List;
 
 public class FrmMain extends JFrame {
 
@@ -30,24 +23,33 @@ public class FrmMain extends JFrame {
 
   private List<FileFormatFactory> fileFormatFactoryList;
 
+    private JCheckBox paintableTypeCheckBox;
+
   // --------------------------------------------------------------------------------
 
-  public FrmMain() {
+    private FrmMain() {
     setLayout(new BorderLayout());
 
     client = new Canvas();
     add(client, BorderLayout.CENTER);
 
-    add(initToolBarPanel(), BorderLayout.NORTH);
+        JPanel toolbarPanel = new JPanel();
+        toolbarPanel.add(initToolBarPanel());
+        toolbarPanel.add(initToolbar2());
+        add(toolbarPanel, BorderLayout.NORTH);
 
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
     setSize(640, 480);
     setVisible(true);
   }
 
   // --------------------------------------------------------------------------------
 
-  public JComponent initToolBarPanel() {
+    public static void main(String[] args) {
+        new FrmMain();
+    }
+
+    private JComponent initToolBarPanel() {
 
     ButtonGroup buttonGroup = new ButtonGroup();
 
@@ -68,7 +70,6 @@ public class FrmMain extends JFrame {
     buttonGroup.add(btnSelect);
 
     // --------------------------------------------------------------------------------
-
     List<PaintableFactory> paintableFactoryList = //
     PluginsReader.fsRead(ClassLoader.getSystemResourceAsStream("plugins.txt"));
 
@@ -80,6 +81,7 @@ public class FrmMain extends JFrame {
         public void actionPerformed(ActionEvent e) {
           client.setPaintableFactory(paintableFactory);
           client.setTool(Tool.PLUGIN);
+            client.setPaintableType(getCurrentPaintableType());
         }
       });
       toolBar.add(btnTool);
@@ -162,6 +164,18 @@ public class FrmMain extends JFrame {
 
   // --------------------------------------------------------------------------------
 
+    private JComponent initToolbar2() {
+        JToolBar toolBar = new JToolBar();
+
+        JLabel paintableTypeLabel = new JLabel("¿vector?");
+        toolBar.add(paintableTypeLabel);
+
+        this.paintableTypeCheckBox = new JCheckBox();
+        toolBar.add(this.paintableTypeCheckBox);
+
+        return toolBar;
+    }
+
   private FileFormatFactory getFileFormatFactory(String ext) {
     for (FileFormatFactory fileFormatFactory : fileFormatFactoryList) {
       if (fileFormatFactory.getExtensionName().equals(ext)) {
@@ -199,19 +213,23 @@ public class FrmMain extends JFrame {
     ExtFileFilter extFileFilter = (ExtFileFilter) fc.getFileFilter();
 
     FileFormatFactory fileFormatFactory = getFileFormatFactory(extFileFilter.getExt());
-    FileFormat/*    */fileFormat/*    */= fileFormatFactory.create();
+      if (fileFormatFactory != null) {
+          FileFormat/*    */fileFormat/*    */ = fileFormatFactory.create();
 
-    if (!file.getAbsolutePath().endsWith(extFileFilter.getExt())) {
-      file = new File( //
-          file.getAbsolutePath() + "." + extFileFilter.getExt());
-    }
+          if (!file.getAbsolutePath().endsWith(extFileFilter.getExt())) {
+              file = new File( //
+                      file.getAbsolutePath() + "." + extFileFilter.getExt());
+          }
 
-    try {
-      fileFormat.save(file, client.getPaintableList());
-    } catch (Exception e) {
-      e.printStackTrace();
+          try {
+              fileFormat.save(file, client.getPaintableList());
+          } catch (Exception e) {
+              e.printStackTrace();
+          }
     }
   }
+
+    // --------------------------------------------------------------------------------
 
   private void btnOpenClicked() {
     JFileChooser fc = createFileChooser();
@@ -227,38 +245,42 @@ public class FrmMain extends JFrame {
     ExtFileFilter extFileFilter = (ExtFileFilter) fc.getFileFilter();
 
     FileFormatFactory fileFormatFactory = getFileFormatFactory(extFileFilter.getExt());
-    FileFormat/*    */fileFormat/*    */= fileFormatFactory.create();
+      if (fileFormatFactory != null) {
+          FileFormat/*    */fileFormat/*    */ = fileFormatFactory.create();
 
-    if (!file.getAbsolutePath().endsWith(extFileFilter.getExt())) {
-      file = new File( //
-          file.getAbsolutePath() + "." + extFileFilter.getExt());
-    }
+          if (!file.getAbsolutePath().endsWith(extFileFilter.getExt())) {
+              file = new File( //
+                      file.getAbsolutePath() + "." + extFileFilter.getExt());
+          }
 
-    try {
-      client.getPaintableList().clear();
-      fileFormat.load(file, client.getPaintableList());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
+          try {
+              client.getPaintableList().clear();
+              fileFormat.load(file, client.getPaintableList());
+          } catch (Exception e) {
+              e.printStackTrace();
+          }
 
-    client.repaint();
+          client.repaint();
+      }
   }
 
   // --------------------------------------------------------------------------------
 
-  protected void btnUndoClicked() {
+    private void btnUndoClicked() {
     client.undo();
   }
 
   // --------------------------------------------------------------------------------
 
-  protected void btnRedoClicked() {
+    private void btnRedoClicked() {
     client.redo();
   }
 
-  // --------------------------------------------------------------------------------
-
-  public static void main(String[] args) {
-    new FrmMain();
+    private PaintableType getCurrentPaintableType() {
+        if (this.paintableTypeCheckBox.isSelected()) {
+            return PaintableType.DRAWN;
+        } else {
+            return PaintableType.IMAGE;
+        }
   }
 }
