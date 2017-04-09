@@ -20,25 +20,24 @@ public class ImageFace extends PaintableBase {
 		super(x1, y1, x2, y2);
 
 		// Opcion A
-		try {
-			bufferedImage = ImageIO.read(new File("smile0.png"));
-			//bufferedImage=ImageCache.getInstance().getImage("smile0.png");
-		} catch (IOException e) {
-			throw new RuntimeException(e);
-		}
+//		try {
+//			bufferedImage = ImageIO.read(new File("smile0.png"));
+//		} catch (IOException e) {
+//			throw new RuntimeException(e);
+//		}
 
-		// Opcion B
-		// switch (state) {
-		// case SmileConstants.SMILE_DW :
-		// bufferedImage = ImageCache.getInstance().getImage("smile0.png");
-		// break;
-		// case SmileConstants.SMILE_OK :
-		// bufferedImage = ImageCache.getInstance().getImage("smile1.png");
-		// break;
-		// case SmileConstants.SMILE_UP :
-		// bufferedImage = ImageCache.getInstance().getImage("smile2.png");
-		// break;
-		// }
+		 //Opcion B
+		 switch (state) {
+		 case SmileConstants.SMILE_DW :
+		 bufferedImage = ImageCache.getInstance().getImage("smile0.png");
+		 break;
+		 case SmileConstants.SMILE_OK :
+		 bufferedImage = ImageCache.getInstance().getImage("smile1.png");
+		 break;
+		 case SmileConstants.SMILE_UP :
+		 bufferedImage = ImageCache.getInstance().getImage("smile2.png");
+		 break;
+		 }
 	}
 
 	// --------------------------------------------------------------------------------

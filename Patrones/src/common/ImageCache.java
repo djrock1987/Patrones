@@ -25,8 +25,12 @@ public class ImageCache {
 
   // --------------------------------------------------------------------------------
 
-  private ImageCache() {
+  private ImageCache()  {
     // Empty
+//	 BufferedImage bufferedImage = ImageIO.read(new File("smile0.png"));
+//	  imageMap.put("smile0.png", bufferedImage);
+//	  bufferedImage = ImageIO.read(new File("smile1.png"));
+//	  image.p
   }
 
   // --------------------------------------------------------------------------------
@@ -35,7 +39,6 @@ public class ImageCache {
     if (instance == null) {
       instance = new ImageCache();
     }
-
     return instance;
   }
 
