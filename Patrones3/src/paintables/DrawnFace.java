@@ -2,19 +2,12 @@ package paintables;
 
 
 import plugins.Paintable;
-import plugins.PaintableBase;
 import plugins.PaintableType;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
 
 // Composite
-public abstract class DrawnFace extends PaintableBase {
-
-    protected List<Paintable> paintableList = new ArrayList<>();
-
-    // --------------------------------------------------------------------------------
+public abstract class DrawnFace extends PaintableComposite {
 
     public DrawnFace(int x1, int y1, int x2, int y2) {
         super(x1, y1, x2, y2);
@@ -36,14 +29,14 @@ public abstract class DrawnFace extends PaintableBase {
         // ----------------------------------------
 
         x = (int) (x1 + (x2 - x1) * 0.20);
-        paintableList.add(new Circle(x, y, x + w, y + h));
+        this.add(new Circle(x, y, x + w, y + h));
 
         // ----------------------------------------
         // Ojo Der
         // ----------------------------------------
 
         x = (int) (x1 + (x2 - x1) * 0.55);
-        paintableList.add(new Circle(x, y, x + w, y + h));
+        this.add(new Circle(x, y, x + w, y + h));
 
         // ----------------------------------------
         // Sonrisa
@@ -53,7 +46,7 @@ public abstract class DrawnFace extends PaintableBase {
         y = (int) (y1 + (y2 - y1) * 0.625);
         w = (int) ((x2 - x1) * 0.5);
         h = (int) ((y2 - y1) * 0.5);
-        drawSmile(x, y, w, h);
+        this.drawSmile(x, y, w, h);
     }
 
     public abstract void drawSmile(int x, int y, int w, int h);
@@ -71,21 +64,6 @@ public abstract class DrawnFace extends PaintableBase {
 
         for (Paintable paintable : paintableList) {
             paintable.draw(g2d);
-        }
-    }
-
-    // --------------------------------------------------------------------------------
-
-    @Override
-    public void move(int dx, int dy) {
-        super.move(dx, dy);
-
-        // ----------------------------------------
-        // Move children
-        // ----------------------------------------
-
-        for (Paintable paintable : paintableList) {
-            paintable.move(dx, dy);
         }
     }
 

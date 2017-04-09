@@ -27,4 +27,10 @@ public interface Paintable {
     PaintableFactory getPaintableFactory();
 
     PaintableType getPaintableType();
+
+    void add(Paintable paintable);
+
+    void remove(Paintable paintable);
+
+    Paintable getChild(int index);
 }
