@@ -1,25 +1,30 @@
 package common;
 
-import java.awt.Graphics2D;
-import java.awt.Point;
+import java.awt.*;
 
 public interface Paintable {
 
-  public boolean inside(Point point);
+    boolean inside(Point point);
 
-  // --------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------
 
-  public void draw(Graphics2D g2d);
+    void draw(Graphics2D g2d);
 
-  public void move(int dx, int dy);
+    void move(int dx, int dy);
 
-  // --------------------------------------------------------------------------------
+    // --------------------------------------------------------------------------------
 
-  public int getX1();
+    int getX1();
 
-  public int getY1();
+    int getY1();
 
-  public int getX2();
+    int getX2();
 
-  public int getY2();
+    int getY2();
+
+    void add(Paintable paintable);
+
+    void remove(Paintable paintable);
+
+    Paintable getChild(int index);
 }

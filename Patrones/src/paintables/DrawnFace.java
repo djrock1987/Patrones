@@ -1,19 +1,11 @@
 package paintables;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
-
 import common.Paintable;
-import common.PaintableBase;
+
+import java.awt.*;
 
 // Composite
-public class DrawnFace extends PaintableBase {
-
-  List<Paintable> paintableList = new ArrayList<Paintable>();
-
-  // --------------------------------------------------------------------------------
+public class DrawnFace extends PaintableComposite {
 
   public DrawnFace(int x1, int y1, int x2, int y2, int state) {
     super(x1, y1, x2, y2);
@@ -35,14 +27,14 @@ public class DrawnFace extends PaintableBase {
     // ----------------------------------------
 
     x = (int) (x1 + (x2 - x1) * 0.20);
-    paintableList.add(new Circle(x, y, x + w, y + h));
+    this.add(new Circle(x, y, x + w, y + h));
 
     // ----------------------------------------
     // Ojo Der
     // ----------------------------------------
 
     x = (int) (x1 + (x2 - x1) * 0.55);
-    paintableList.add(new Circle(x, y, x + w, y + h));
+    this.add(new Circle(x, y, x + w, y + h));
 
     // ----------------------------------------
     // Sonrisa
@@ -52,7 +44,7 @@ public class DrawnFace extends PaintableBase {
     y = (int) (y1 + (y2 - y1) * 0.625);
     w = (int) ((x2 - x1) * 0.5);
     h = (int) ((y2 - y1) * 0.5);
-    paintableList.add(new Smile(x, y, x + w, y + h, state));
+    this.add(new Smile(x, y, x + w, y + h, state));
   }
 
   // --------------------------------------------------------------------------------
@@ -68,21 +60,6 @@ public class DrawnFace extends PaintableBase {
 
     for (Paintable paintable : paintableList) {
       paintable.draw(g2d);
-    }
-  }
-
-  // --------------------------------------------------------------------------------
-
-  @Override
-  public void move(int dx, int dy) {
-    super.move(dx, dy);
-
-    // ----------------------------------------
-    // Move children
-    // ----------------------------------------
-
-    for (Paintable paintable : paintableList) {
-      paintable.move(dx, dy);
     }
   }
 }

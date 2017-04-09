@@ -3,10 +3,7 @@ package main;
 import commands.AddBorderCommand;
 import commands.Invoker;
 import commands.MoveCommand;
-import common.Command;
-import common.Paintable;
-import common.PaintableFactory;
-import common.SmileConstants;
+import common.*;
 
 import javax.swing.*;
 import java.awt.*;
@@ -34,7 +31,7 @@ public class Canvas extends JPanel {
         int x;
         int y;
 
-        PaintableFactory paintableFactory = new PaintableFactory();
+        PaintableFactory paintableFactory = new ImagePaintableFactory();
 
         // Face 1
         x = 100;

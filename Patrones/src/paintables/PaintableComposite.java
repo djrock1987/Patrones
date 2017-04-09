@@ -1,14 +1,16 @@
 package paintables;
 
-import plugins.Paintable;
-import plugins.PaintableBase;
+
+import common.Paintable;
+import common.PaintableBase;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class PaintableComposite extends PaintableBase {
-    protected List<Paintable> paintableList;
+    List<Paintable> paintableList;
+
 
     PaintableComposite(int x1, int y1, int x2, int y2) {
         super(x1, y1, x2, y2);
