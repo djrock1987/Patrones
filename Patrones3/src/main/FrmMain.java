@@ -20,6 +20,7 @@ import formats.ExtFileFilter;
 import formats.FileFormat;
 import formats.FileFormatFactory;
 import formats.FileFormatReader;
+import java.awt.GridLayout;
 import main.Canvas.Tool;
 import plugins.PaintableFactory;
 import plugins.PluginsReader;
@@ -40,6 +41,7 @@ public class FrmMain extends JFrame {
     add(client, BorderLayout.CENTER);
 
     add(initToolBarPanel(), BorderLayout.NORTH);
+    add(initToolBarPanel2(), BorderLayout.EAST);
 
     setDefaultCloseOperation(EXIT_ON_CLOSE);
     setSize(640, 480);
@@ -160,7 +162,50 @@ public class FrmMain extends JFrame {
 
     return toolBar;
   }
+public JComponent initToolBarPanel2() {
 
+    ButtonGroup buttonGroup = new ButtonGroup();
+
+    JToolBar toolBar = new JToolBar();
+
+    // --------------------------------------------------------------------------------
+  toolBar.setLayout(new GridLayout(0, 1));
+    JToggleButton btnSelect = new JToggleButton("Select");
+    btnSelect.addActionListener(new ActionListener() {
+      public void actionPerformed(ActionEvent e) {
+        // Dumb so far...
+        // If no factory, then select is selected
+        client.setPaintableFactory(null);
+      }
+    });
+    toolBar.add(btnSelect);
+    buttonGroup.add(btnSelect);
+
+    // ----------------------------------------
+
+    List<PaintableFactory> paintableFactoryList = //
+    PluginsReader.fsRead(ClassLoader.getSystemResourceAsStream("plugins.txt"));
+
+    for (final PaintableFactory paintableFactory : paintableFactoryList) {
+      JToggleButton btnTool = //
+      new JToggleButton(paintableFactory.getClass().getSimpleName());
+      btnTool.addActionListener(new ActionListener() {
+        public void actionPerformed(ActionEvent e) {
+          client.setPaintableFactory(paintableFactory);
+        }
+      });
+      toolBar.add(btnTool);
+      buttonGroup.add(btnTool);
+    }
+
+    btnSelect.setSelected(true);
+
+    return toolBar;
+  }
+
+  // --------------------------------------------------------------------------------
+
+  
   // --------------------------------------------------------------------------------
 
   private FileFormatFactory getFileFormatFactory(String ext) {
@@ -172,6 +217,7 @@ public class FrmMain extends JFrame {
 
     return null;
   }
+  
 
   private JFileChooser createFileChooser() {
     JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));

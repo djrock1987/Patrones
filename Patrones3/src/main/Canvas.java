@@ -19,6 +19,7 @@ import common.Command;
 import plugins.Paintable;
 import plugins.PaintableFactory;
 
+
 public class Canvas extends JPanel {
 
   public enum Tool {
