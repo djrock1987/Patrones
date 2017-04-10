@@ -85,7 +85,20 @@ public class FrmMain extends JFrame {
       toolBar.add(btnTool);
       buttonGroup.add(btnTool);
     }
+    
+    for (final PaintableFactory paintableFactory : paintableFactoryList) {
+        JToggleButton btnTool = new JToggleButton(paintableFactory.getToolIcon());
+        btnTool.setToolTipText(paintableFactory.getToolName());
 
+        btnTool.addActionListener(new ActionListener() {
+          public void actionPerformed(ActionEvent e) {
+            client.setPaintableFactory(paintableFactory);
+            client.setTool(Tool.PLUGIN);
+          }
+        });
+        toolBar.add(btnTool);
+        buttonGroup.add(btnTool);
+      }
     // --------------------------------------------------------------------------------
 
     JToggleButton btnDelete = new JToggleButton( //

@@ -32,7 +32,7 @@ public class CreateCommand implements Command {
   @Override
   public void redoCommand() {
     if (paintable == null) {
-      paintable = paintableFactory.create(x - 50, y - 50, x + 50, y + 50);
+      paintable = paintableFactory.create(x - 50, y - 50, x + 50, y + 50,true);
     }
 
     paintableList.add(paintable);
