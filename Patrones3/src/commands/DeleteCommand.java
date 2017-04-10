@@ -26,7 +26,7 @@ public class DeleteCommand implements Command {
   // --------------------------------------------------------------------------------
 
   @Override
-  public void redoCommand() {
+  public void redoCommand(boolean im) {
     paintableList.remove(paintable);
   }
 

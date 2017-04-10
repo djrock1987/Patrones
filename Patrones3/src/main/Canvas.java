@@ -10,7 +10,9 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JToggleButton;
 
 import commands.CreateCommand;
 import commands.DeleteCommand;
@@ -36,6 +38,7 @@ public class Canvas extends JPanel {
 
   private Paintable draggedPaintable;
   private Point/* */draggedBasePoint;
+  private boolean im; 
 
   private Tool tool = Tool.SELECT;
 
@@ -135,7 +138,7 @@ public class Canvas extends JPanel {
               paintable, //
               paintableList);
 
-          deleteCommand.redoCommand();
+          deleteCommand.redoCommand(true);
 
           undoList.add(deleteCommand);
           redoList.clear();
@@ -147,9 +150,8 @@ public class Canvas extends JPanel {
             paintableFactory, //
             evt.getPoint().x, evt.getPoint().y, //
             paintableList);
-
-        createCommand.redoCommand();
-
+        
+        createCommand.redoCommand(im);
         undoList.add(createCommand);
         redoList.clear();
         break;
@@ -170,7 +172,7 @@ public class Canvas extends JPanel {
     }
 
     MoveCommand moveCommand = new MoveCommand(draggedPaintable, dx, dy);
-    moveCommand.redoCommand();
+    moveCommand.redoCommand(true);
 
     undoList.add(moveCommand);
     redoList.clear();
@@ -241,7 +243,7 @@ public class Canvas extends JPanel {
     }
 
     Command command = redoList.remove(redoList.size() - 1);
-    command.redoCommand();
+    command.redoCommand(true);
     undoList.add(command);
     repaint();
   }
@@ -265,8 +267,11 @@ public class Canvas extends JPanel {
   public Tool getTool() {
     return tool;
   }
-
   public void setTool(Tool tool) {
     this.tool = tool;
+  }
+  
+  public void setIm(boolean im){
+	  this.im=im;
   }
 }

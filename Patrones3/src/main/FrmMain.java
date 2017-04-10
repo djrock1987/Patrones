@@ -80,6 +80,7 @@ public class FrmMain extends JFrame {
         public void actionPerformed(ActionEvent e) {
           client.setPaintableFactory(paintableFactory);
           client.setTool(Tool.PLUGIN);
+          client.setIm(true);
         }
       });
       toolBar.add(btnTool);
@@ -94,6 +95,7 @@ public class FrmMain extends JFrame {
           public void actionPerformed(ActionEvent e) {
             client.setPaintableFactory(paintableFactory);
             client.setTool(Tool.PLUGIN);
+            client.setIm(false);
           }
         });
         toolBar.add(btnTool);
