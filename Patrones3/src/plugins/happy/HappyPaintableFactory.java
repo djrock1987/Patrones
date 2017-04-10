@@ -24,6 +24,7 @@ public class HappyPaintableFactory implements PaintableFactory {
   @Override
   public ImageIcon getToolIcon() {
     return new ImageIcon(ImageCache.getInstance().getImage("smile2_icon.png", getClass()));
+    //return new ImageIcon(ImageCache.getInstance().getSystemImage("smile2_icon.png"));
   }
 
   @Override

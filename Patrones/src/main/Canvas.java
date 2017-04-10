@@ -20,13 +20,14 @@ import common.SmileConstants;
 
 public class Canvas extends JPanel {
 
-  private List<Paintable> paintableList = new ArrayList<Paintable>();
+
+private List<Paintable> paintableList = new ArrayList<Paintable>();
 
   private List<Command> undoList = new ArrayList<Command>();
   private List<Command> redoList = new ArrayList<Command>();
 
   private Paintable draggedPaintable;
-  private Point/* */draggedBasePoint;
+  private Point draggedBasePoint;
 
   private int dx;
   private int dy;
@@ -42,17 +43,17 @@ public class Canvas extends JPanel {
     // Face 1
     x = 100;
     y = 100;
-    paintableList.add(paintableFactory.create(x, y, x + 100, y + 100, SmileConstants.SMILE_DW));
+    paintableList.add(paintableFactory.create(x, y, x + 100, y + 100, SmileConstants.SMILE_DW,getClass()));
 
     // Face 2
     x = 200;
     y = 200;
-    paintableList.add(paintableFactory.create(x, y, x + 100, y + 100, SmileConstants.SMILE_OK));
+    paintableList.add(paintableFactory.create(x, y, x + 100, y + 100, SmileConstants.SMILE_OK,getClass()));
 
     // Face 3
     x = 300;
     y = 300;
-    paintableList.add(paintableFactory.create(x, y, x + 100, y + 100, SmileConstants.SMILE_UP));
+    paintableList.add(paintableFactory.create(x, y, x + 100, y + 100, SmileConstants.SMILE_UP,getClass()));
 
     // --------------------------------------------------------------------------------
     // Mouse Handling

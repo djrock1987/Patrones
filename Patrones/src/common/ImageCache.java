@@ -9,7 +9,7 @@ import java.util.Map;
 import javax.imageio.ImageIO;
 
 // Singleton
-public class ImageCache {
+public class ImageCache  {
 
   // --------------------------------------------------------------------------------
   // Variable de clase (la única instancia de la clase que va a existir)
@@ -25,7 +25,7 @@ public class ImageCache {
 
   // --------------------------------------------------------------------------------
 
-  private ImageCache()  {
+  public ImageCache()  {
     // Empty
 //	 BufferedImage bufferedImage = ImageIO.read(new File("smile0.png"));
 //	  imageMap.put("smile0.png", bufferedImage);

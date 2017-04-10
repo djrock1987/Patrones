@@ -2,7 +2,6 @@ package paintables;
 
 import java.awt.Graphics2D;
 import java.awt.image.BufferedImage;
-
 import common.ImageCache;
 import common.PaintableBase;
 import common.SmileConstants;
@@ -16,7 +15,7 @@ public class ImageFace extends PaintableBase {
 
 	// --------------------------------------------------------------------------------
 
-	public ImageFace(int x1, int y1, int x2, int y2, int state) {
+	public ImageFace(int x1, int y1, int x2, int y2, int state,Class<?>clazz) {
 		super(x1, y1, x2, y2);
 
 		// Opcion A
@@ -26,18 +25,23 @@ public class ImageFace extends PaintableBase {
 			throw new RuntimeException(e);
 		}
 
-		 //Opcion B
-		 switch (state) {
-		 case SmileConstants.SMILE_DW :
-		 bufferedImage = ImageCache.getInstance().getImage("smile0.png");
-		 break;
-		 case SmileConstants.SMILE_OK :
-		 bufferedImage = ImageCache.getInstance().getImage("smile1.png");
-		 break;
-		 case SmileConstants.SMILE_UP :
-		 bufferedImage = ImageCache.getInstance().getImage("smile2.png");
-		 break;
-		 }
+		// Opcion B
+		try {
+
+			switch (state) {
+			case SmileConstants.SMILE_DW:
+				bufferedImage = ImageCache.getInstance().getImage("smile0.png");
+				break;
+			case SmileConstants.SMILE_OK:
+				bufferedImage = ImageCache.getInstance().getImage("smile1.png");
+				break;
+			case SmileConstants.SMILE_UP:
+				bufferedImage = ImageCache.getInstance().getImage("smile2.png");
+				break;
+			}
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
 	}
 
 	// --------------------------------------------------------------------------------
