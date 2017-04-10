@@ -9,7 +9,7 @@ import paintables.DrawnFace;
 // Factory
 public class SadPaintableFactory implements PaintableFactory {
 
-   private boolean useImage = false;
+   private boolean useImage = true;
 
   public Paintable create(int x1, int y1, int x2, int y2) {
       if (useImage) {
