@@ -1,3 +1,0 @@
-plugins.happy.HappyPaintableFactory
-plugins.normal.NormalPaintableFactory
-plugins.sad.SadPaintableFactory

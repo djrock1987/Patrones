@@ -1,3 +1,0 @@
-tools.happy.HappyPaintableFactory
-tools.normal.NormalPaintableFactory
-tools.sad.SadPaintableFactory
