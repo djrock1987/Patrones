@@ -14,7 +14,7 @@ public class SadPaintableFactory implements PaintableFactory {
       if (useImage) {
     return new SadImageFace(x1, y1, x2, y2);
        } else {
-         return new DrawnFace(x1, y1, x2, y2, 2);
+         return new DrawnFace(x1, y1, x2, y2, 0);
         }
   }
 }

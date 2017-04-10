@@ -80,7 +80,6 @@ public class FrmMain extends JFrame {
     });
     ret.add(btnSelect);
     buttonGroup.add(btnSelect);
-
     // ----------------------------------------
 
     List<PaintableFactory> paintableFactoryList = //
@@ -93,11 +92,10 @@ public class FrmMain extends JFrame {
         public void actionPerformed(ActionEvent e) {
           client.setPaintableFactory(paintableFactory);
         }
-      });
+      });      
       ret.add(btnTool);
       buttonGroup.add(btnTool);
     }
-
     btnSelect.setSelected(true);
 
     return ret;

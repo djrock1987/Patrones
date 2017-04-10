@@ -3,8 +3,8 @@ package paintables;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import common.PaintableBase;
-import common.SmileConstants;
+import plugins.PaintableBase;
+import plugins.PaintableFactory;
 
 public class Smile extends PaintableBase {
 
@@ -27,15 +27,21 @@ public class Smile extends PaintableBase {
     int w = x2 - x1;
     int h = y2 - y1;
     switch (state) {
-      case SmileConstants.SMILE_UP :
+      case 2 :
         g2d.drawArc(x1, y1 - w / 2, w, h, 0, -180);
         break;
-      case SmileConstants.SMILE_DW :
+      case 0 :
         g2d.drawArc(x1, y1/*    */, w, h, 0, +180);
         break;
-      case SmileConstants.SMILE_OK :
+      case 1 :
         g2d.drawLine(x1, y1 + h / 3, x1 + w, y1 + h / 3);
         break;
     }
   }
+
+@Override
+public PaintableFactory getPaintableFactory() {
+	// TODO Auto-generated method stub
+	return null;
+}
 }

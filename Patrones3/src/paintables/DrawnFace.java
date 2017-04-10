@@ -5,8 +5,9 @@ import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
 
-import common.Paintable;
-import common.PaintableBase;
+import plugins.Paintable;
+import plugins.PaintableBase;
+import plugins.PaintableFactory;
 
 // Composite
 public class DrawnFace extends PaintableBase {
@@ -85,4 +86,10 @@ public class DrawnFace extends PaintableBase {
       paintable.move(dx, dy);
     }
   }
+
+@Override
+public PaintableFactory getPaintableFactory() {
+	// TODO Auto-generated method stub
+	return null;
+}
 }
