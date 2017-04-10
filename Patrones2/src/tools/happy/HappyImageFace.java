@@ -5,6 +5,7 @@ import java.awt.image.BufferedImage;
 
 import common.ImageCache;
 import common.PaintableBase;
+import common.PaintableFactory;
 
 public class HappyImageFace extends PaintableBase {
 
@@ -24,4 +25,6 @@ public class HappyImageFace extends PaintableBase {
   public void draw(Graphics2D g2d) {
     g2d.drawImage(bufferedImage, x1, y1, x2 - x1, y2 - y1, null);
   }
+  
+  
 }
