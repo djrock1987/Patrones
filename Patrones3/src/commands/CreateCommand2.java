@@ -7,7 +7,7 @@ import plugins.Paintable;
 import plugins.PaintableFactory;
 
 // Command
-public class CreateCommand implements Command {
+public class CreateCommand2 implements Command {
 
   private PaintableFactory paintableFactory;
 
@@ -20,7 +20,7 @@ public class CreateCommand implements Command {
 
   // --------------------------------------------------------------------------------
 
-  public CreateCommand(PaintableFactory paintableFactory, int x, int y, List<Paintable> paintableList) {
+  public CreateCommand2(PaintableFactory paintableFactory, int x, int y, List<Paintable> paintableList) {
     this.paintableFactory = paintableFactory;
     this.x = x;
     this.y = y;
@@ -32,7 +32,7 @@ public class CreateCommand implements Command {
   @Override
   public void redoCommand() {
     if (paintable == null) {
-      paintable = paintableFactory.create(x - 50, y - 50, x + 50, y + 50,true);
+      paintable = paintableFactory.create(x - 50, y - 50, x + 50, y + 50,false);
     }
 
     paintableList.add(paintable);

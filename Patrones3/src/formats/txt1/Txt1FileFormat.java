@@ -37,7 +37,7 @@ public class Txt1FileFormat implements FileFormat {
           Integer.parseInt(data[1]), //
           Integer.parseInt(data[2]), //
           Integer.parseInt(data[3]), //
-          Integer.parseInt(data[4]));
+          Integer.parseInt(data[4]),true);
 
       paintableList.add(paintable);
     }

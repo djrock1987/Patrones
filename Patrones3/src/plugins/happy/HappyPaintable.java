@@ -15,7 +15,6 @@ public class HappyPaintable extends PaintableBase {
 
   public HappyPaintable(int x1, int y1, int x2, int y2) {
     super(x1, y1, x2, y2);
-
     bufferedImage = ImageCache.getInstance().getImage("smile2.png", getClass());
   }
 

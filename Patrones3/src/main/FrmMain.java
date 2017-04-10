@@ -21,244 +21,263 @@ import formats.FileFormat;
 import formats.FileFormatFactory;
 import formats.FileFormatReader;
 import main.Canvas.Tool;
+import main.Canvas2.Tool2;
 import plugins.PaintableFactory;
 import plugins.PluginsReader;
 
 public class FrmMain extends JFrame {
 
-  private Canvas client;
+	private Canvas client;
+	private Canvas2 client2;
+
+	private List<FileFormatFactory> fileFormatFactoryList;
+	private int contador=0;
+
+	// --------------------------------------------------------------------------------
+
+	public FrmMain() {
+		setLayout(new BorderLayout());
+
+		client = new Canvas();
+		add(client, BorderLayout.CENTER);
+
+		add(initToolBarPanel(), BorderLayout.NORTH);
+
+		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setSize(640, 480);
+		setVisible(true);
+	}
+
+	// --------------------------------------------------------------------------------
+
+	public JComponent initToolBarPanel() {
+
+		ButtonGroup buttonGroup = new ButtonGroup();
+
+		JToolBar toolBar = new JToolBar();
+
+		// --------------------------------------------------------------------------------
+
+		JToggleButton btnSelect = new JToggleButton( //
+				new ImageIcon(ImageCache.getInstance().getSystemImage("images/cursor.png")));
+
+		btnSelect.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				client.setPaintableFactory(null);
+				client.setTool(Tool.SELECT);
+			}
+		});
+		toolBar.add(btnSelect);
+		buttonGroup.add(btnSelect);
+
+		// --------------------------------------------------------------------------------
+
+		List<PaintableFactory> paintableFactoryList = //
+				PluginsReader.fsRead(ClassLoader.getSystemResourceAsStream("plugins.txt"));
+		
+		for (final PaintableFactory paintableFactory : paintableFactoryList) {
+			JToggleButton btnTool = new JToggleButton(paintableFactory.getToolIcon());
+			btnTool.setToolTipText(paintableFactory.getToolName());
+			
+			btnTool.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					client.setPaintableFactory(paintableFactory);
+					client.setTool(Tool.PLUGIN);
+					client.setisImage(true);
+					
+				}
+			});
+			toolBar.add(btnTool);
+			buttonGroup.add(btnTool);
+		}
+
+		for (final PaintableFactory paintableFactory : paintableFactoryList) {
+			JToggleButton btnTool = new JToggleButton(paintableFactory.getToolIcon());
+			btnTool.setToolTipText(paintableFactory.getToolName());
+			btnTool.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					client.setPaintableFactory(paintableFactory);
+					client.setTool(Tool.PLUGIN);
+					client.setisImage(false);
+				}
+			});
+			toolBar.add(btnTool);
+			buttonGroup.add(btnTool);
+		}
+
+		// --------------------------------------------------------------------------------
+
+		JToggleButton btnDelete = new JToggleButton( //
+				new ImageIcon(ImageCache.getInstance().getSystemImage("images/delete_icon.png")));
 
-  private List<FileFormatFactory> fileFormatFactoryList;
+		btnDelete.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				client.setPaintableFactory(null);
+				client.setTool(Tool.DELETE);
+			}
+		});
+		toolBar.add(btnDelete);
+		buttonGroup.add(btnDelete);
 
-  // --------------------------------------------------------------------------------
+		// --------------------------------------------------------------------------------
 
-  public FrmMain() {
-    setLayout(new BorderLayout());
+		JButton btnUndo = new JButton( //
+				new ImageIcon(ImageCache.getInstance().getSystemImage("images/undo_button.png")));
 
-    client = new Canvas();
-    add(client, BorderLayout.CENTER);
+		btnUndo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				btnUndoClicked();
+			}
+		});
+		toolBar.add(btnUndo);
 
-    add(initToolBarPanel(), BorderLayout.NORTH);
+		// --------------------------------------------------------------------------------
 
-    setDefaultCloseOperation(EXIT_ON_CLOSE);
-    setSize(640, 480);
-    setVisible(true);
-  }
+		JButton btnRedo = new JButton( //
+				new ImageIcon(ImageCache.getInstance().getSystemImage("images/redo_button.png")));
 
-  // --------------------------------------------------------------------------------
+		btnRedo.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				btnRedoClicked();
+			}
+		});
+		toolBar.add(btnRedo);
 
-  public JComponent initToolBarPanel() {
+		// --------------------------------------------------------------------------------
 
-    ButtonGroup buttonGroup = new ButtonGroup();
+		fileFormatFactoryList = //
+				FileFormatReader.fsRead(ClassLoader.getSystemResourceAsStream("formats.txt"));
 
-    JToolBar toolBar = new JToolBar();
+		// --------------------------------------------------------------------------------
 
-    // --------------------------------------------------------------------------------
+		JButton btnSave = new JButton( //
+				new ImageIcon(ImageCache.getInstance().getSystemImage("images/save_icon.png")));
 
-    JToggleButton btnSelect = new JToggleButton( //
-        new ImageIcon(ImageCache.getInstance().getSystemImage("images/cursor.png")));
+		btnSave.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				btnSaveClicked();
+			}
+		});
+		toolBar.add(btnSave);
 
-    btnSelect.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        client.setPaintableFactory(null);
-        client.setTool(Tool.SELECT);
-      }
-    });
-    toolBar.add(btnSelect);
-    buttonGroup.add(btnSelect);
+		// --------------------------------------------------------------------------------
 
-    // --------------------------------------------------------------------------------
+		JButton btnOpen = new JButton( //
+				new ImageIcon(ImageCache.getInstance().getSystemImage("images/open_icon.png")));
 
-    List<PaintableFactory> paintableFactoryList = //
-    PluginsReader.fsRead(ClassLoader.getSystemResourceAsStream("plugins.txt"));
+		btnOpen.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent evt) {
+				btnOpenClicked();
+			}
+		});
+		toolBar.add(btnOpen);
 
-    for (final PaintableFactory paintableFactory : paintableFactoryList) {
-      JToggleButton btnTool = new JToggleButton(paintableFactory.getToolIcon());
-      btnTool.setToolTipText(paintableFactory.getToolName());
+		// --------------------------------------------------------------------------------
 
-      btnTool.addActionListener(new ActionListener() {
-        public void actionPerformed(ActionEvent e) {
-          client.setPaintableFactory(paintableFactory);
-          client.setTool(Tool.PLUGIN);
-        }
-      });
-      toolBar.add(btnTool);
-      buttonGroup.add(btnTool);
-    }
+		btnSelect.setSelected(true);
 
-    // --------------------------------------------------------------------------------
+		return toolBar;
+	}
 
-    JToggleButton btnDelete = new JToggleButton( //
-        new ImageIcon(ImageCache.getInstance().getSystemImage("images/delete_icon.png")));
+	// --------------------------------------------------------------------------------
 
-    btnDelete.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        client.setPaintableFactory(null);
-        client.setTool(Tool.DELETE);
-      }
-    });
-    toolBar.add(btnDelete);
-    buttonGroup.add(btnDelete);
+	private FileFormatFactory getFileFormatFactory(String ext) {
+		for (FileFormatFactory fileFormatFactory : fileFormatFactoryList) {
+			if (fileFormatFactory.getExtensionName().equals(ext)) {
+				return fileFormatFactory;
+			}
+		}
 
-    // --------------------------------------------------------------------------------
+		return null;
+	}
 
-    JButton btnUndo = new JButton( //
-        new ImageIcon(ImageCache.getInstance().getSystemImage("images/undo_button.png")));
+	private JFileChooser createFileChooser() {
+		JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
 
-    btnUndo.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        btnUndoClicked();
-      }
-    });
-    toolBar.add(btnUndo);
+		fileChooser.setAcceptAllFileFilterUsed(false);
 
-    // --------------------------------------------------------------------------------
+		for (FileFormatFactory fileFormatFactory : fileFormatFactoryList) {
+			fileChooser.addChoosableFileFilter(new ExtFileFilter( //
+					fileFormatFactory.getExtensionName()));
+		}
 
-    JButton btnRedo = new JButton( //
-        new ImageIcon(ImageCache.getInstance().getSystemImage("images/redo_button.png")));
+		return fileChooser;
+	}
 
-    btnRedo.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        btnRedoClicked();
-      }
-    });
-    toolBar.add(btnRedo);
+	private void btnSaveClicked() {
+		JFileChooser fc = createFileChooser();
 
-    // --------------------------------------------------------------------------------
+		int retVal = fc.showSaveDialog(this);
 
-    fileFormatFactoryList = //
-    FileFormatReader.fsRead(ClassLoader.getSystemResourceAsStream("formats.txt"));
+		if (retVal != JFileChooser.APPROVE_OPTION) {
+			return;
+		}
 
-    // --------------------------------------------------------------------------------
+		File file = fc.getSelectedFile();
 
-    JButton btnSave = new JButton( //
-        new ImageIcon(ImageCache.getInstance().getSystemImage("images/save_icon.png")));
+		ExtFileFilter extFileFilter = (ExtFileFilter) fc.getFileFilter();
 
-    btnSave.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        btnSaveClicked();
-      }
-    });
-    toolBar.add(btnSave);
+		FileFormatFactory fileFormatFactory = getFileFormatFactory(extFileFilter.getExt());
+		FileFormat/*    */ fileFormat/*    */ = fileFormatFactory.create();
 
-    // --------------------------------------------------------------------------------
+		if (!file.getAbsolutePath().endsWith(extFileFilter.getExt())) {
+			file = new File( //
+					file.getAbsolutePath() + "." + extFileFilter.getExt());
+		}
 
-    JButton btnOpen = new JButton( //
-        new ImageIcon(ImageCache.getInstance().getSystemImage("images/open_icon.png")));
+		try {
+			fileFormat.save(file, client.getPaintableList());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
 
-    btnOpen.addActionListener(new ActionListener() {
-      public void actionPerformed(ActionEvent evt) {
-        btnOpenClicked();
-      }
-    });
-    toolBar.add(btnOpen);
+	private void btnOpenClicked() {
+		JFileChooser fc = createFileChooser();
 
-    // --------------------------------------------------------------------------------
+		int retVal = fc.showOpenDialog(this);
 
-    btnSelect.setSelected(true);
+		if (retVal != JFileChooser.APPROVE_OPTION) {
+			return;
+		}
 
-    return toolBar;
-  }
+		File file = fc.getSelectedFile();
 
-  // --------------------------------------------------------------------------------
+		ExtFileFilter extFileFilter = (ExtFileFilter) fc.getFileFilter();
 
-  private FileFormatFactory getFileFormatFactory(String ext) {
-    for (FileFormatFactory fileFormatFactory : fileFormatFactoryList) {
-      if (fileFormatFactory.getExtensionName().equals(ext)) {
-        return fileFormatFactory;
-      }
-    }
+		FileFormatFactory fileFormatFactory = getFileFormatFactory(extFileFilter.getExt());
+		FileFormat/*    */ fileFormat/*    */ = fileFormatFactory.create();
 
-    return null;
-  }
+		if (!file.getAbsolutePath().endsWith(extFileFilter.getExt())) {
+			file = new File( //
+					file.getAbsolutePath() + "." + extFileFilter.getExt());
+		}
 
-  private JFileChooser createFileChooser() {
-    JFileChooser fileChooser = new JFileChooser(System.getProperty("user.dir"));
+		try {
+			client.getPaintableList().clear();
+			fileFormat.load(file, client.getPaintableList());
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-    fileChooser.setAcceptAllFileFilterUsed(false);
+		client.repaint();
+	}
 
-    for (FileFormatFactory fileFormatFactory : fileFormatFactoryList) {
-      fileChooser.addChoosableFileFilter(new ExtFileFilter( //
-          fileFormatFactory.getExtensionName()));
-    }
+	// --------------------------------------------------------------------------------
 
-    return fileChooser;
-  }
+	protected void btnUndoClicked() {
+		client.undo();
+	}
 
-  private void btnSaveClicked() {
-    JFileChooser fc = createFileChooser();
+	// --------------------------------------------------------------------------------
 
-    int retVal = fc.showSaveDialog(this);
+	protected void btnRedoClicked() {
+		client.redo();
+	}
 
-    if (retVal != JFileChooser.APPROVE_OPTION) {
-      return;
-    }
+	// --------------------------------------------------------------------------------
 
-    File file = fc.getSelectedFile();
-
-    ExtFileFilter extFileFilter = (ExtFileFilter) fc.getFileFilter();
-
-    FileFormatFactory fileFormatFactory = getFileFormatFactory(extFileFilter.getExt());
-    FileFormat/*    */fileFormat/*    */= fileFormatFactory.create();
-
-    if (!file.getAbsolutePath().endsWith(extFileFilter.getExt())) {
-      file = new File( //
-          file.getAbsolutePath() + "." + extFileFilter.getExt());
-    }
-
-    try {
-      fileFormat.save(file, client.getPaintableList());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-  }
-
-  private void btnOpenClicked() {
-    JFileChooser fc = createFileChooser();
-
-    int retVal = fc.showOpenDialog(this);
-
-    if (retVal != JFileChooser.APPROVE_OPTION) {
-      return;
-    }
-
-    File file = fc.getSelectedFile();
-
-    ExtFileFilter extFileFilter = (ExtFileFilter) fc.getFileFilter();
-
-    FileFormatFactory fileFormatFactory = getFileFormatFactory(extFileFilter.getExt());
-    FileFormat/*    */fileFormat/*    */= fileFormatFactory.create();
-
-    if (!file.getAbsolutePath().endsWith(extFileFilter.getExt())) {
-      file = new File( //
-          file.getAbsolutePath() + "." + extFileFilter.getExt());
-    }
-
-    try {
-      client.getPaintableList().clear();
-      fileFormat.load(file, client.getPaintableList());
-    } catch (Exception e) {
-      e.printStackTrace();
-    }
-
-    client.repaint();
-  }
-
-  // --------------------------------------------------------------------------------
-
-  protected void btnUndoClicked() {
-    client.undo();
-  }
-
-  // --------------------------------------------------------------------------------
-
-  protected void btnRedoClicked() {
-    client.redo();
-  }
-
-  // --------------------------------------------------------------------------------
-
-  public static void main(String[] args) {
-    new FrmMain();
-  }
+	public static void main(String[] args) {
+		new FrmMain();
+	}
 }

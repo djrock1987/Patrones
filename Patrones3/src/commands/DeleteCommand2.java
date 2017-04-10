@@ -4,44 +4,36 @@ import java.util.List;
 
 import common.Command;
 import plugins.Paintable;
-import plugins.PaintableFactory;
 
 // Command
-public class CreateCommand implements Command {
-
-  private PaintableFactory paintableFactory;
+public class DeleteCommand2 implements Command {
 
   private Paintable paintable;
 
   private List<Paintable> paintableList;
 
-  private int x;
-  private int y;
+  private int index = -1;
 
   // --------------------------------------------------------------------------------
 
-  public CreateCommand(PaintableFactory paintableFactory, int x, int y, List<Paintable> paintableList) {
-    this.paintableFactory = paintableFactory;
-    this.x = x;
-    this.y = y;
+  public DeleteCommand2(Paintable paintable, List<Paintable> paintableList) {
+    this.paintable = paintable;
     this.paintableList = paintableList;
+
+    this.index = paintableList.indexOf(paintable);
   }
 
   // --------------------------------------------------------------------------------
 
   @Override
   public void redoCommand() {
-    if (paintable == null) {
-      paintable = paintableFactory.create(x - 50, y - 50, x + 50, y + 50,true);
-    }
-
-    paintableList.add(paintable);
+    paintableList.remove(paintable);
   }
 
   // --------------------------------------------------------------------------------
 
   @Override
   public void undoCommand() {
-    paintableList.remove(paintable);
+    paintableList.add(index, paintable);
   }
 }
